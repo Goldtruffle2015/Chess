@@ -42,3 +42,9 @@ class ChessPiece:
 
     def reDraw(self, window):
         window.blit(self.img, (self.x, self.y))
+
+    def Flip_Coordinates(self):  # This method is used by black to have the board flipped
+        self.x = 480 - self.x
+        self.y = 540 - self.y
+
+        return self.x, self.y
