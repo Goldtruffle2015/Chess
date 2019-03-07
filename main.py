@@ -18,8 +18,11 @@ pygame.display.set_caption('Chess')
 clock = pygame.time.Clock()
 
 window.fill((200, 200, 200)) # Create Background
-# Create the ChessBoard #
-ChessBoard_li = []
+
+# Create star
+star = pygame.image.load('Star.png')
+# Create the chessboard #
+ChessBoard_li = []  # Keeps track of all the square on the chess
 ChessBoardColors = [(255, 222, 173), (139, 69, 19)] # Colors: Navajowhite, Saddlebrown
 for i in range(64):
     x = (i % 8) * 60
@@ -34,14 +37,19 @@ pygame.draw.rect(window, (255, 255, 255), pygame.Rect(485, 0, 235, 600))
 
 # Code Starts Here #
 n = Network()
-Pos = n.Make_Connection()
+Data = n.Make_Connection()
 
 ## Make Chess Pieces
-chess_pieces = [ChessPiece(window, Pos[0][0], Pos[0][1], 'RookBlack.png'), ChessPiece(window, Pos[1][0], Pos[1][1], 'KnightBlack.png'), ChessPiece(window, Pos[2][0], Pos[2][1], 'BishopBlack.png'), ChessPiece(window, Pos[3][0], Pos[3][1], 'QueenBlack.png'), ChessPiece(window, Pos[4][0], Pos[4][1], 'KingBlack.png'), ChessPiece(window, Pos[5][0], Pos[5][1], 'BishopBlack.png'), ChessPiece(window, Pos[6][0], Pos[6][1], 'KnightBlack.png'), ChessPiece(window, Pos[7][0], Pos[7][1], 'RookBlack.png'), ChessPiece(window, Pos[8][0], Pos[8][1], 'PawnBlack.png'), ChessPiece(window, Pos[9][0], Pos[9][1], 'PawnBlack.png'), ChessPiece(window, Pos[10][0], Pos[10][1], 'PawnBlack.png'), ChessPiece(window, Pos[11][0], Pos[11][1], 'PawnBlack.png'), ChessPiece(window, Pos[12][0], Pos[12][1], 'PawnBlack.png'), ChessPiece(window, Pos[13][0], Pos[13][1], 'PawnBlack.png'), ChessPiece(window, Pos[14][0], Pos[14][1], 'PawnBlack.png'), ChessPiece(window, Pos[15][0], Pos[15][1], 'PawnBlack.png'), ChessPiece(window, Pos[16][0], Pos[16][1], 'PawnWhite.png'), ChessPiece(window, Pos[17][0], Pos[17][1], 'PawnWhite.png'), ChessPiece(window, Pos[18][0], Pos[18][1], 'PawnWhite.png'), ChessPiece(window, Pos[19][0], Pos[19][1], 'PawnWhite.png'), ChessPiece(window, Pos[20][0], Pos[20][1], 'PawnWhite.png'), ChessPiece(window, Pos[21][0], Pos[21][1], 'PawnWhite.png'), ChessPiece(window, Pos[22][0], Pos[22][1], 'PawnWhite.png'), ChessPiece(window, Pos[23][0], Pos[23][1], 'PawnWhite.png'), ChessPiece(window, Pos[24][0], Pos[24][1], 'RookWhite.png'), ChessPiece(window, Pos[25][0], Pos[25][1], 'KnightWhite.png'), ChessPiece(window, Pos[26][0], Pos[26][1], 'BishopWhite.png'), ChessPiece(window, Pos[27][0], Pos[27][1], 'QueenWhite.png'), ChessPiece(window, Pos[28][0], Pos[28][1], 'KingWhite.png'), ChessPiece(window, Pos[29][0], Pos[29][1], 'BishopWhite.png'), ChessPiece(window, Pos[30][0], Pos[30][1], 'KnightWhite.png'), ChessPiece(window, Pos[31][0], Pos[31][1], 'RookWhite.png')]
+white = [Pawn(window, Data[0][16][0], Data[0][16][1], 'PawnWhite.png'), Pawn(window, Data[0][17][0], Data[0][17][1], 'PawnWhite.png'), Pawn(window, Data[0][18][0], Data[0][18][1], 'PawnWhite.png'), Pawn(window, Data[0][19][0], Data[0][19][1], 'PawnWhite.png'), Pawn(window, Data[0][20][0], Data[0][20][1], 'PawnWhite.png'), Pawn(window, Data[0][21][0], Data[0][21][1], 'PawnWhite.png'), Pawn(window, Data[0][22][0], Data[0][22][1], 'PawnWhite.png'), Pawn(window, Data[0][23][0], Data[0][23][1], 'PawnWhite.png'), Rook(window, Data[0][24][0], Data[0][24][1], 'RookWhite.png'), Knight(window, Data[0][25][0], Data[0][25][1], 'KnightWhite.png'), Bishop(window, Data[0][26][0], Data[0][26][1], 'BishopWhite.png'), Queen(window, Data[0][27][0], Data[0][27][1], 'QueenWhite.png'), King(window, Data[0][28][0], Data[0][28][1], 'KingWhite.png'), Bishop(window, Data[0][29][0], Data[0][29][1], 'BishopWhite.png'), Knight(window, Data[0][30][0], Data[0][30][1], 'KnightWhite.png'), Rook(window, Data[0][31][0], Data[0][31][1], 'RookWhite.png')]
+
+black = [Rook(window, Data[0][0][0], Data[0][0][1], 'RookBlack.png'), Knight(window, Data[0][1][0], Data[0][1][1], 'KnightBlack.png'), Bishop(window, Data[0][2][0], Data[0][2][1], 'BishopBlack.png'), Queen(window, Data[0][3][0], Data[0][3][1], 'QueenBlack.png'), King(window, Data[0][4][0], Data[0][4][1], 'KingBlack.png'), Bishop(window, Data[0][5][0], Data[0][5][1], 'BishopBlack.png'), Knight(window, Data[0][6][0], Data[0][6][1], 'KnightBlack.png'), Rook(window, Data[0][7][0], Data[0][7][1], 'RookBlack.png'), Pawn(window, Data[0][8][0], Data[0][8][1], 'PawnBlack.png'), Pawn(window, Data[0][9][0], Data[0][9][1], 'PawnBlack.png'), Pawn(window, Data[0][10][0], Data[0][10][1], 'PawnBlack.png'), Pawn(window, Data[0][11][0], Data[0][11][1], 'PawnBlack.png'), Pawn(window, Data[0][12][0], Data[0][12][1], 'PawnBlack.png'), Pawn(window, Data[0][13][0], Data[0][13][1], 'PawnBlack.png'), Pawn(window, Data[0][14][0], Data[0][14][1], 'PawnBlack.png'), Pawn(window, Data[0][15][0], Data[0][15][1], 'PawnBlack.png')]
+
+chess_pieces = [white, black]
 
 clock = pygame.time.Clock()
 
 run = True
+# Game Starts Here #
 while run:
     clock.tick(60)
 
@@ -49,6 +57,16 @@ while run:
         if event.type == pygame.QUIT:
             run = False
             break
+
+    m1, m2, m3 = pygame.mouse.get_pressed()
+    if m1:  # When the left mouse button is pressed
+        m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
+
+        for piece in chess_pieces[Data[1]]:
+            if m_pos[0] >= piece.x and m_pos[0] < piece.x + 60 and m_pos[1] >= piece.y and m_pos[1] < piece.y + 60:
+                legal_moves = piece.getLegalMoves()  # Returns a list of coordinates to display
+                for coordinates in legal_moves:
+                    window.blit(star, (coordinates[0], coordinates[1]))
 
     pygame.display.update()
 
