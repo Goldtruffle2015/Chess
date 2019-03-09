@@ -8,6 +8,19 @@ import math
 from Classes import *
 import pygame
 
+def resetBoard(squares, pieces):  # Used to draw over the stars from the board
+    # Redraw the squares #
+    for s in squares:
+        s.reDraw(window)
+
+    # Redraw the white pieces #
+    for w in pieces[0]:
+        w.reDraw(window)
+
+    # Redraw the black pieces #
+    for b in pieces[1]:
+        b.reDraw(window)
+
 pygame.init()  # Initialize pygame
 
 windowx = 720
@@ -45,6 +58,7 @@ white = [Pawn(window, Data[0][16][0], Data[0][16][1], 'PawnWhite.png'), Pawn(win
 black = [Rook(window, Data[0][0][0], Data[0][0][1], 'RookBlack.png'), Knight(window, Data[0][1][0], Data[0][1][1], 'KnightBlack.png'), Bishop(window, Data[0][2][0], Data[0][2][1], 'BishopBlack.png'), Queen(window, Data[0][3][0], Data[0][3][1], 'QueenBlack.png'), King(window, Data[0][4][0], Data[0][4][1], 'KingBlack.png'), Bishop(window, Data[0][5][0], Data[0][5][1], 'BishopBlack.png'), Knight(window, Data[0][6][0], Data[0][6][1], 'KnightBlack.png'), Rook(window, Data[0][7][0], Data[0][7][1], 'RookBlack.png'), Pawn(window, Data[0][8][0], Data[0][8][1], 'PawnBlack.png'), Pawn(window, Data[0][9][0], Data[0][9][1], 'PawnBlack.png'), Pawn(window, Data[0][10][0], Data[0][10][1], 'PawnBlack.png'), Pawn(window, Data[0][11][0], Data[0][11][1], 'PawnBlack.png'), Pawn(window, Data[0][12][0], Data[0][12][1], 'PawnBlack.png'), Pawn(window, Data[0][13][0], Data[0][13][1], 'PawnBlack.png'), Pawn(window, Data[0][14][0], Data[0][14][1], 'PawnBlack.png'), Pawn(window, Data[0][15][0], Data[0][15][1], 'PawnBlack.png')]
 
 chess_pieces = [white, black]
+print(chess_pieces)
 
 clock = pygame.time.Clock()
 
@@ -64,9 +78,12 @@ while run:
 
         for piece in chess_pieces[Data[1]]:
             if m_pos[0] >= piece.x and m_pos[0] < piece.x + 60 and m_pos[1] >= piece.y and m_pos[1] < piece.y + 60:
-                legal_moves = piece.getLegalMoves()  # Returns a list of coordinates to display
-                for coordinates in legal_moves:
+                resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
+                piece.legal_moves = []  # Clears the list
+                piece.getLegalMoves()  # Returns a list of coordinates to display
+                for coordinates in piece.legal_moves:
                     window.blit(star, (coordinates[0], coordinates[1]))
+                break
 
     pygame.display.update()
 

@@ -28,8 +28,12 @@ class Squares:
         self.x = x
         self.y = y
         self.color = color
+        self.rectangle = pygame.Rect(self.x, self.y, 60, 60)
 
-        pygame.draw.rect(window, self.color, pygame.Rect(self.x, self.y, 60, 60))
+        pygame.draw.rect(window, self.color, self.rectangle)
+
+    def reDraw(self, window):
+        pygame.draw.rect(window, self.color, self.rectangle)
 
 class ChessPiece:
     def __init__(self, window, x, y, Img_ID):
@@ -62,11 +66,77 @@ class King(ChessPiece):
         self.y = y
         super().__init__(window, self.x, self.y, Img_ID)
 
+    def getLegalMoves(self):
+        # 1 Up
+        if self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x), int(self.y - 60)))
+
+        # 1 Right --> 1 Up
+        if self.x + 60 <= 420 and self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x + 60), int(self.y - 60)))
+
+        # 1 Right
+        if self.x + 60 <= 420:
+            self.legal_moves.append((int(self.x + 60), int(self.y)))
+
+        # 1 Right --> 1 Down
+        if self.x + 60 <= 420 and self.y + 60 <= 480:
+            self.legal_moves.append((int(self.x + 60), int(self.y + 60)))
+
+        # 1 Down
+        if self.y + 60 <= 480:
+            self.legal_moves.append((int(self.x), int(self.y + 60)))
+
+        # 1 Left --> 1 Down
+        if self.x - 60 >= 0 and self.y + 60 <= 480:
+            self.legal_moves.append((int(self.x - 60), int(self.y + 60)))
+
+        # 1 left
+        if self.x - 60 >= 0:
+            self.legal_moves.append((int(self.x - 60), int(self.y)))
+
+        # 1 left --> 1 UP
+        if self.x - 60 >= 0 and self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x - 60), int(self.y - 60)))
+
 class Knight(ChessPiece):
     def __init__(self, window, x, y, Img_ID):
         self.x = x
         self.y = y
         super().__init__(window, self.x, self.y, Img_ID)
+
+    def getLegalMoves(self):
+        # 1 Left --> 2 Up
+        if self.x - 60 >= 0 and self.y - 120 >= 60:
+            self.legal_moves.append((int(self.x - 60), int(self.y - 120)))
+
+        # 1 Right --> 2 Up
+        if self.x + 60 <= 420 and self.y - 120 >= 60:
+            self.legal_moves.append((int(self.x + 60), int(self.y - 120)))
+
+        # 2 Right --> 1 Up
+        if self.x + 120 <= 420 and self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x + 120), int(self.y - 60)))
+
+        # 2 Right --> 1 Down
+        if self.x + 120 <= 420 and self.y + 60 <= 480:
+            self.legal_moves.append((int(self.x + 120), int(self.y + 60)))
+
+        # 1 Right --> 2 Down
+        if self.x + 60 <= 420 and self.y + 120 <= 480:
+            self.legal_moves.append((int(self.x + 60), int(self.y + 120)))
+
+        # 1 Left --> 2 Down
+        if self.x - 60 >= 0 and self.y + 120 <= 480:
+            self.legal_moves.append((int(self.x - 60), int(self.y + 120)))
+
+        # 2 Left --> 1 Down
+        if self.x - 120 >= 0 and self.y + 60 <= 480:
+            self.legal_moves.append((int(self.x - 120), int(self.y + 60)))
+
+        # 2 Left --> 1 Up
+        if self.x - 120 >= 0 and self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x - 120), int(self.y - 60)))
 
 class Pawn(ChessPiece):
     def __init__(self, window, x, y, Img_ID):
@@ -75,14 +145,18 @@ class Pawn(ChessPiece):
         super().__init__(window, self.x, self.y, Img_ID)
 
     def getLegalMoves(self):
-        self.legal_moves = []  # Clears the list
         # Top Left
-        if self.x - 60 >= 0 and self.y - 60 >= 0:
+        if self.x - 60 >= 0 and self.y - 60 >= 60:
             self.legal_moves.append((int(self.x - 60), int(self.y - 60)))  # Stores the row and column indexes as a tuple
         # Top Right
-        if self.x + 60 <= 420 and self.y - 60 >= 0:
+        if self.x + 60 <= 420 and self.y - 60 >= 60:
             self.legal_moves.append((int(self.x + 60), int(self.y - 60)))
-        return self.legal_moves
+        # 1 Up
+        if self.y - 60 >= 60:
+            self.legal_moves.append((int(self.x), int(self.y - 60)))
+        # 2 Up
+        if self.y - 120 >= 60:
+            self.legal_moves.append((int(self.x), int(self.y - 120)))
 
 class Queen(ChessPiece):
     def __init__(self, window, x, y, Img_ID):
