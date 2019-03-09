@@ -15,7 +15,7 @@ except socket.error as e:
 s.listen(2)  # Wait for connection from clients
 print('Waiting for a connection, Server Started ...')
 
-Data = [[[0, 60], [60, 60], [120, 60], [180, 60], [240, 60], [300, 60], [360, 60], [420, 60], [0, 120], [60, 120], [120, 120], [180, 120], [240, 120], [300, 120], [360, 120], [420, 120], [0, 420], [60, 420], [120, 420], [180, 420], [240, 420], [300, 420], [360, 420], [420, 420], [0, 480], [60, 480], [120, 480], [180, 480], [240, 480], [300, 480], [360, 480], [420, 480]], '']
+Data = [[[0, 60], [60, 60], [120, 60], [180, 60], [240, 60], [300, 60], [360, 60], [420, 60], [0, 120], [60, 120], [120, 120], [180, 120], [240, 120], [300, 120], [360, 120], [420, 120], [0, 420], [60, 420], [120, 420], [180, 420], [240, 420], [300, 420], [360, 420], [420, 420], [0, 480], [60, 480], [120, 480], [180, 480], [240, 480], [300, 480], [360, 480], [420, 480]], '']  # Starting positions of the pieces
 
 def ThreatedClient(conn, player):
     if player == 0: # White
@@ -32,7 +32,7 @@ def ThreatedClient(conn, player):
     while True:
         try:
             new_data = pickle.loads(conn.recv(2048))  # Get new positions made by the client
-            if player == 1:
+            if player == 1:  # Black
                 # Flip the coordinates
                 for coordinates in new_data[0]:
                     coordinates[0] = 420 - coordinates[0]

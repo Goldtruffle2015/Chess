@@ -21,6 +21,21 @@ def resetBoard(squares, pieces):  # Used to draw over the stars from the board
     for b in pieces[1]:
         b.reDraw(window)
 
+def get_board_state(data_list):
+    local_pieces = []  # Keeps track of the position of the player's pieces
+    enemy_pieces = []  # Keeps track of the position of the enemy's pieces
+    if data_list[1] == 0:  # If player is white
+        for i in range(16, 31):  # White pieces
+            local_pieces.append(data_list[0][i])
+        for i in range(16):  # Black pieces
+            enemy_pieces.append(data_list[0][i])
+    elif data_list[1] == 1:  # If player is black
+        for i in range(16):  # Black pieces
+            local_pieces.append(data_list[0][i])
+        for i in range(16, 31):  # White pieces
+            enemy_pieces.append(data_list[0][i])
+    return local_pieces, enemy_pieces
+
 pygame.init()  # Initialize pygame
 
 windowx = 720
@@ -58,7 +73,6 @@ white = [Pawn(window, Data[0][16][0], Data[0][16][1], 'PawnWhite.png'), Pawn(win
 black = [Rook(window, Data[0][0][0], Data[0][0][1], 'RookBlack.png'), Knight(window, Data[0][1][0], Data[0][1][1], 'KnightBlack.png'), Bishop(window, Data[0][2][0], Data[0][2][1], 'BishopBlack.png'), Queen(window, Data[0][3][0], Data[0][3][1], 'QueenBlack.png'), King(window, Data[0][4][0], Data[0][4][1], 'KingBlack.png'), Bishop(window, Data[0][5][0], Data[0][5][1], 'BishopBlack.png'), Knight(window, Data[0][6][0], Data[0][6][1], 'KnightBlack.png'), Rook(window, Data[0][7][0], Data[0][7][1], 'RookBlack.png'), Pawn(window, Data[0][8][0], Data[0][8][1], 'PawnBlack.png'), Pawn(window, Data[0][9][0], Data[0][9][1], 'PawnBlack.png'), Pawn(window, Data[0][10][0], Data[0][10][1], 'PawnBlack.png'), Pawn(window, Data[0][11][0], Data[0][11][1], 'PawnBlack.png'), Pawn(window, Data[0][12][0], Data[0][12][1], 'PawnBlack.png'), Pawn(window, Data[0][13][0], Data[0][13][1], 'PawnBlack.png'), Pawn(window, Data[0][14][0], Data[0][14][1], 'PawnBlack.png'), Pawn(window, Data[0][15][0], Data[0][15][1], 'PawnBlack.png')]
 
 chess_pieces = [white, black]
-print(chess_pieces)
 
 clock = pygame.time.Clock()
 
@@ -76,14 +90,17 @@ while run:
     if m1:  # When the left mouse button is pressed
         m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
 
-        for piece in chess_pieces[Data[1]]:
-            if m_pos[0] >= piece.x and m_pos[0] < piece.x + 60 and m_pos[1] >= piece.y and m_pos[1] < piece.y + 60:
+        local, enemy = get_board_state(Data)
+        for piece in chess_pieces[Data[1]]:  # Finds the piece that the player clicked on
+            if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:
                 resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
                 piece.legal_moves = []  # Clears the list
-                piece.getLegalMoves()  # Returns a list of coordinates to display
+                piece.getLegalMoves(local, enemy)  # Returns a list of coordinates to display
                 for coordinates in piece.legal_moves:
                     window.blit(star, (coordinates[0], coordinates[1]))
                 break
+
+    Data = n.send_and_receive(Data)
 
     pygame.display.update()
 
