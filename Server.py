@@ -15,7 +15,49 @@ except socket.error as e:
 s.listen(2)  # Wait for connection from clients
 print('Waiting for a connection, Server Started ...')
 
-Data = [[[0, 60], [60, 60], [120, 60], [180, 60], [240, 60], [300, 60], [360, 60], [420, 60], [0, 120], [60, 120], [120, 120], [180, 120], [240, 120], [300, 120], [360, 120], [420, 120], [0, 420], [60, 420], [120, 420], [180, 420], [240, 420], [300, 420], [360, 420], [420, 420], [0, 480], [60, 480], [120, 480], [180, 480], [240, 480], [300, 480], [360, 480], [420, 480]], '']  # Starting positions of the pieces
+# Index 0: All piece positions
+    # Index 0: x-coordinate
+    # Index 1: y-coordinate
+    # Index 2: Piece ID
+    # Piece ID's:
+'''
+A8 Black Rook: 0
+B8 Black Knight: 1
+C8 Black Bishop: 2
+Black Queen: 3
+Black King: 4
+F8 Black Bishop: 5
+G8 Black Knight: 6
+H8 Black Rook: 7
+A7 Black Pawn: 8
+B7 Black Pawn: 9
+C7 Black Pawn: 10
+D7 Black Pawn: 11
+E7 Black Pawn: 12
+F7 Black Pawn: 13
+G7 Black Pawn: 14
+H7 Black Pawn: 15
+
+A2 White Pawn: 16
+B2 White Pawn: 17
+C2 White Pawn: 18
+D2 White Pawn: 19
+E2 White Pawn: 20
+F2 White Pawn: 21
+G2 White Pawn: 22
+H2 White Pawn: 23
+A1 White Rook: 24
+B1 White Knight: 25
+C1 White Bishop: 26
+White Queen: 27
+White King: 28
+F1 White Bishop: 29
+G1 White Knight: 30
+H1 White Rook: 31
+'''
+# Index 1: # Previous Piece Position
+# Index 2: New piece position
+Data = [[[0, 60, 0], [60, 60, 1], [120, 60, 2], [180, 60, 3], [240, 60, 4], [300, 60, 5], [360, 60, 6], [420, 60, 7], [0, 120, 8], [60, 120, 9], [120, 120, 10], [180, 120, 11], [240, 120, 12], [300, 120, 13], [360, 120, 14], [420, 120, 15], [0, 420, 16], [60, 420, 17], [120, 420, 18], [180, 420, 19], [240, 420, 20], [300, 420, 21], [360, 420, 22], [420, 420, 23], [0, 480, 24], [60, 480, 25], [120, 480, 26], [180, 480, 27], [240, 480, 28], [300, 480, 29], [360, 480, 30], [420, 480, 31]], '']  # Starting positions of the pieces
 
 def ThreatedClient(conn, player):
     if player == 0: # White

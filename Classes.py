@@ -37,9 +37,10 @@ class Squares:
         pygame.draw.rect(window, self.color, self.rectangle)
 
 class ChessPiece:
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x  # The x-coordinate of the piece
         self.y = y  # The y-coordinate of the piece
+        self.id = piece_ID  # Used to reference the piece
         self.img = pygame.image.load(Img_ID)  # The loaded image
         self.legal_moves = []  # A list that contains all the square the piece can go to
 
@@ -50,10 +51,10 @@ class ChessPiece:
         window.blit(self.img, (self.x, self.y))
 
 class Bishop(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
@@ -111,10 +112,10 @@ class Bishop(ChessPiece):
                 break
 
 class King(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
@@ -151,10 +152,10 @@ class King(ChessPiece):
             self.legal_moves.append((int(self.x - 60), int(self.y - 60)))
 
 class Knight(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
@@ -191,10 +192,10 @@ class Knight(ChessPiece):
             self.legal_moves.append((int(self.x - 120), int(self.y - 60)))
 
 class Pawn(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
@@ -212,10 +213,10 @@ class Pawn(ChessPiece):
             self.legal_moves.append((int(self.x), int(self.y - 120)))
 
 class Queen(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
@@ -325,10 +326,10 @@ class Queen(ChessPiece):
                 break
 
 class Rook(ChessPiece):
-    def __init__(self, window, x, y, Img_ID):
+    def __init__(self, window, x, y, piece_ID, Img_ID):
         self.x = x
         self.y = y
-        super().__init__(window, self.x, self.y, Img_ID)
+        super().__init__(window, self.x, self.y, piece_ID, Img_ID)
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
