@@ -63,6 +63,10 @@ class Bishop(ChessPiece):
         while True:
             if self.x + 60*iteration <= 420 and self.y - 60*iteration >= 60 and not [int(self.x + 60*iteration), int(self.y - 60*iteration)] in local:
                 self.legal_moves.append((int(self.x + 60*iteration), int(self.y - 60*iteration)))
+
+                if [int(self.x + 60*iteration), int(self.y - 60*iteration)] in enemy:  # If an enemy piece occupies the square
+                    break
+
                 iteration += 1
             else:
                 break
@@ -72,6 +76,10 @@ class Bishop(ChessPiece):
         while True:
             if self.x + 60*iteration <= 420 and self.y + 60*iteration <= 480 and not [int(self.x + 60*iteration), int(self.y + 60*iteration)] in local:
                 self.legal_moves.append((int(self.x + 60*iteration), int(self.y + 60*iteration)))
+
+                if [int(self.x + 60*iteration), int(self.y + 60*iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -81,6 +89,10 @@ class Bishop(ChessPiece):
         while True:
             if self.x - 60*iteration >= 0 and self.y + 60*iteration <= 480 and not [int(self.x - 60*iteration), int(self.y + 60*iteration)] in local:
                 self.legal_moves.append((int(self.x - 60*iteration), int(self.y + 60*iteration)))
+
+                if [int(self.x - 60*iteration), int(self.y + 60*iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -90,6 +102,10 @@ class Bishop(ChessPiece):
         while True:
             if self.x - 60*iteration >= 0 and self.y - 60*iteration >= 60 and not [int(self.x - 60*iteration), int(self.y - 60*iteration)] in local:
                 self.legal_moves.append((int(self.x - 60*iteration), int(self.y - 60*iteration)))
+
+                if [int(self.x - 60*iteration), int(self.y - 60*iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -189,10 +205,10 @@ class Pawn(ChessPiece):
         if self.x + 60 <= 420 and self.y - 60 >= 60 and [int(self.x + 60), int(self.y - 60)] in enemy:
             self.legal_moves.append((int(self.x + 60), int(self.y - 60)))
         # 1 Up
-        if self.y - 60 >= 60 and not [int(self.x), int(self.y - 60)] in local:
+        if self.y - 60 >= 60 and not [int(self.x), int(self.y - 60)] in local and not [int(self.x), int(self.y - 60)] in enemy:
             self.legal_moves.append((int(self.x), int(self.y - 60)))
         # 2 Up
-        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local:
+        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local and not [int(self.x), int(self.y - 120)] in enemy:
             self.legal_moves.append((int(self.x), int(self.y - 120)))
 
 class Queen(ChessPiece):
@@ -209,6 +225,10 @@ class Queen(ChessPiece):
         while True:
             if self.y - 60 * iteration >= 60 and not [int(self.x), int(self.y - 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x), int(self.y - 60 * iteration)))
+
+                if [int(self.x), int(self.y - 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -218,6 +238,10 @@ class Queen(ChessPiece):
         while True:
             if self.x + 60 * iteration <= 420 and self.y - 60 * iteration >= 60 and not [int(self.x + 60 * iteration), int(self.y - 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x + 60 * iteration), int(self.y - 60 * iteration)))
+
+                if [int(self.x + 60 * iteration), int(self.y - 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -227,6 +251,10 @@ class Queen(ChessPiece):
         while True:
             if self.x + 60 * iteration <= 420 and not [int(self.x + 60 * iteration), int(self.y)] in local:
                 self.legal_moves.append((int(self.x + 60 * iteration), int(self.y)))
+
+                if [int(self.x + 60 * iteration), int(self.y)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -236,6 +264,10 @@ class Queen(ChessPiece):
         while True:
             if self.x + 60 * iteration <= 420 and self.y + 60 * iteration <= 480 and not [int(self.x + 60 * iteration), int(self.y + 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x + 60 * iteration), int(self.y + 60 * iteration)))
+
+                if [int(self.x + 60 * iteration), int(self.y + 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -245,6 +277,10 @@ class Queen(ChessPiece):
         while True:
             if self.y + 60 * iteration <= 480 and not [int(self.x), int(self.y + 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x), int(self.y + 60 * iteration)))
+
+                if [int(self.x), int(self.y + 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -254,6 +290,10 @@ class Queen(ChessPiece):
         while True:
             if self.x - 60 * iteration >= 0 and self.y + 60 * iteration <= 480 and not [int(self.x - 60 * iteration), int(self.y + 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x - 60 * iteration), int(self.y + 60 * iteration)))
+
+                if [int(self.x - 60 * iteration), int(self.y + 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -263,6 +303,10 @@ class Queen(ChessPiece):
         while True:
             if self.x - 60 * iteration >= 0 and not [int(self.x - 60 * iteration), int(self.y)] in local:
                 self.legal_moves.append((int(self.x - 60 * iteration), int(self.y)))
+
+                if [int(self.x - 60 * iteration), int(self.y)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -272,6 +316,10 @@ class Queen(ChessPiece):
         while True:
             if self.x - 60 * iteration >= 0 and self.y - 60 * iteration >= 60 and not [int(self.x - 60 * iteration), int(self.y - 60 * iteration)] in local:
                 self.legal_moves.append((int(self.x - 60 * iteration), int(self.y - 60 * iteration)))
+
+                if [int(self.x - 60 * iteration), int(self.y - 60 * iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -290,6 +338,10 @@ class Rook(ChessPiece):
         while True:
             if self.y - 60*iteration >= 60 and not [int(self.x), int(self.y - 60*iteration)] in local:
                 self.legal_moves.append((int(self.x), int(self.y - 60*iteration)))
+
+                if [int(self.x), int(self.y - 60*iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -299,6 +351,10 @@ class Rook(ChessPiece):
         while True:
             if self.x + 60*iteration <= 420 and not [int(self.x + 60*iteration), int(self.y)] in local:
                 self.legal_moves.append((int(self.x + 60*iteration), int(self.y)))
+
+                if [int(self.x + 60*iteration), int(self.y)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -308,6 +364,10 @@ class Rook(ChessPiece):
         while True:
             if self.y + 60*iteration <= 480 and not [int(self.x), int(self.y + 60*iteration)] in local:
                 self.legal_moves.append((int(self.x), int(self.y + 60*iteration)))
+
+                if [int(self.x), int(self.y + 60*iteration)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
@@ -317,6 +377,10 @@ class Rook(ChessPiece):
         while True:
             if self.x - 60*iteration >= 0 and not [int(self.x - 60*iteration), int(self.y)] in local:
                 self.legal_moves.append((int(self.x - 60*iteration), int(self.y)))
+
+                if [int(self.x - 60*iteration), int(self.y)] in enemy:
+                    break
+
                 iteration += 1
             else:
                 break
