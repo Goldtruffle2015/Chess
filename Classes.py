@@ -60,6 +60,45 @@ class Bishop(ChessPiece):
         self.y = y
         super().__init__(window, self.x, self.y, Img_ID)
 
+    def getLegalMoves(self):
+        self.legal_moves = []
+
+        # NorthEast
+        iteration = 1
+        while True:
+            if self.x + 60*iteration <= 420 and self.y - 60*iteration >= 60:
+                self.legal_moves.append((int(self.x + 60*iteration), int(self.y - 60*iteration)))
+                iteration += 1
+            else:
+                break
+
+        # SouthEast
+        iteration = 1
+        while True:
+            if self.x + 60*iteration <= 420 and self.y + 60*iteration <= 480:
+                self.legal_moves.append((int(self.x + 60*iteration), int(self.y + 60*iteration)))
+                iteration += 1
+            else:
+                break
+
+        # SouthWest
+        iteration = 1
+        while True:
+            if self.x - 60*iteration >= 0 and self.y + 60*iteration <= 480:
+                self.legal_moves.append((int(self.x - 60*iteration), int(self.y + 60*iteration)))
+                iteration += 1
+            else:
+                break
+
+        # NorthWest
+        iteration = 1
+        while True:
+            if self.x - 60*iteration >= 0 and self.y - 60*iteration >= 60:
+                self.legal_moves.append((int(self.x - 60*iteration), int(self.y - 60*iteration)))
+                iteration += 1
+            else:
+                break
+
 class King(ChessPiece):
     def __init__(self, window, x, y, Img_ID):
         self.x = x
@@ -67,6 +106,7 @@ class King(ChessPiece):
         super().__init__(window, self.x, self.y, Img_ID)
 
     def getLegalMoves(self):
+        self.legal_moves = []
         # 1 Up
         if self.y - 60 >= 60:
             self.legal_moves.append((int(self.x), int(self.y - 60)))
@@ -106,6 +146,7 @@ class Knight(ChessPiece):
         super().__init__(window, self.x, self.y, Img_ID)
 
     def getLegalMoves(self):
+        self.legal_moves = []
         # 1 Left --> 2 Up
         if self.x - 60 >= 0 and self.y - 120 >= 60:
             self.legal_moves.append((int(self.x - 60), int(self.y - 120)))
@@ -145,6 +186,7 @@ class Pawn(ChessPiece):
         super().__init__(window, self.x, self.y, Img_ID)
 
     def getLegalMoves(self):
+        self.legal_moves = []
         # Top Left
         if self.x - 60 >= 0 and self.y - 60 >= 60:
             self.legal_moves.append((int(self.x - 60), int(self.y - 60)))  # Stores the row and column indexes as a tuple
@@ -164,8 +206,122 @@ class Queen(ChessPiece):
         self.y = y
         super().__init__(window, self.x, self.y, Img_ID)
 
+    def getLegalMoves(self):
+        self.legal_moves = []
+
+        # North
+        iteration = 1  # Keeps track of the number of squares to go up by
+        while True:
+            if self.y - 60 * iteration >= 60:
+                self.legal_moves.append((int(self.x), int(self.y - 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
+        # NorthEast
+        iteration = 1
+        while True:
+            if self.x + 60 * iteration <= 420 and self.y - 60 * iteration >= 60:
+                self.legal_moves.append((int(self.x + 60 * iteration), int(self.y - 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
+        # East
+        iteration = 1
+        while True:
+            if self.x + 60 * iteration <= 420:
+                self.legal_moves.append((int(self.x + 60 * iteration), int(self.y)))
+                iteration += 1
+            else:
+                break
+
+        # SouthEast
+        iteration = 1
+        while True:
+            if self.x + 60 * iteration <= 420 and self.y + 60 * iteration <= 480:
+                self.legal_moves.append((int(self.x + 60 * iteration), int(self.y + 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
+        # South
+        iteration = 1
+        while True:
+            if self.y + 60 * iteration <= 480:
+                self.legal_moves.append((int(self.x), int(self.y + 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
+        # SouthWest
+        iteration = 1
+        while True:
+            if self.x - 60 * iteration >= 0 and self.y + 60 * iteration <= 480:
+                self.legal_moves.append((int(self.x - 60 * iteration), int(self.y + 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
+        # West
+        iteration = 1
+        while True:
+            if self.x - 60 * iteration >= 0:
+                self.legal_moves.append((int(self.x - 60 * iteration), int(self.y)))
+                iteration += 1
+            else:
+                break
+
+        # NorthWest
+        iteration = 1
+        while True:
+            if self.x - 60 * iteration >= 0 and self.y - 60 * iteration >= 60:
+                self.legal_moves.append((int(self.x - 60 * iteration), int(self.y - 60 * iteration)))
+                iteration += 1
+            else:
+                break
+
 class Rook(ChessPiece):
     def __init__(self, window, x, y, Img_ID):
         self.x = x
         self.y = y
         super().__init__(window, self.x, self.y, Img_ID)
+
+    def getLegalMoves(self):
+        self.legal_moves = []
+
+        # Up
+        iteration = 1  # Keeps track of the number of squares to go up by
+        while True:
+            if self.y - 60*iteration >= 60:
+                self.legal_moves.append((int(self.x), int(self.y - 60*iteration)))
+                iteration += 1
+            else:
+                break
+
+        # Right
+        iteration = 1
+        while True:
+            if self.x + 60*iteration <= 420:
+                self.legal_moves.append((int(self.x + 60*iteration), int(self.y)))
+                iteration += 1
+            else:
+                break
+
+        # Down
+        iteration = 1
+        while True:
+            if self.y + 60*iteration <= 480:
+                self.legal_moves.append((int(self.x), int(self.y + 60*iteration)))
+                iteration += 1
+            else:
+                break
+
+        # Left
+        iteration = 1
+        while True:
+            if self.x - 60*iteration >= 0:
+                self.legal_moves.append((int(self.x - 60*iteration), int(self.y)))
+                iteration += 1
+            else:
+                break
