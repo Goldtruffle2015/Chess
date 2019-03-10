@@ -385,3 +385,9 @@ class Rook(ChessPiece):
                 iteration += 1
             else:
                 break
+
+class player:
+    def __init__(self):
+        self.data = ''
+        self.local_pos = ''
+        self.enemy_pos = ''
