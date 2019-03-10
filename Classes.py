@@ -385,3 +385,8 @@ class Rook(ChessPiece):
                 iteration += 1
             else:
                 break
+
+class player:
+    def __init__(self):
+        self.legal_moves = []  # Stores the legal moves of the local player
+        self.selected_piece = ''  # Stores the piece the player selected
