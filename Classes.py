@@ -385,11 +385,3 @@ class Rook(ChessPiece):
                 iteration += 1
             else:
                 break
-
-class player:
-    def __init__(self):
-        self.data = []  # Stores the data sent from the server
-        self.local_pos = []  # Stores friendly piece positions
-        self.enemy_pos = []  # Stores enemy piece positions
-        self.legal_move = []  # Stores legal moves from selected piece
-        self.selected_piece = ''  # Stores the piece object the player selected

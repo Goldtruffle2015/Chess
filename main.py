@@ -13,28 +13,39 @@ def resetBoard(squares, pieces):  # Used to draw over the stars from the board
     for s in squares:
         s.reDraw(window)
 
-    # Redraw the white pieces #
-    for w in pieces[0]:
-        w.reDraw(window)
+    # Redraw the local pieces #
+    for l in pieces[0]:
+        l.reDraw(window)
 
-    # Redraw the black pieces #
-    for b in pieces[1]:
-        b.reDraw(window)
+    # Redraw the enemy pieces #
+    for e in pieces[1]:
+        e.reDraw(window)
 
-def get_board_state(data_list):
+def get_board_state(local, enemy):
     local_pieces = []  # Keeps track of the position of the player's pieces
     enemy_pieces = []  # Keeps track of the position of the enemy's pieces
-    if data_list[1] == 0:  # If player is white
-        for i in range(16, 31):  # White pieces
-            local_pieces.append(data_list[0][i][:2])
-        for i in range(16):  # Black pieces
-            enemy_pieces.append(data_list[0][i][:2])
-    elif data_list[1] == 1:  # If player is black
-        for i in range(16):  # Black pieces
-            local_pieces.append(data_list[0][i][:2])
-        for i in range(16, 31):  # White pieces
-            enemy_pieces.append(data_list[0][i][:2])
+
+    for i in range(16):  # Local pieces
+        local_pieces.append(local[i][:2])
+    for i in range(16):  # Enemy pieces
+        enemy_pieces.append(enemy[i][:2])
+
     return local_pieces, enemy_pieces
+
+dictionary_of_image_IDs = {
+    1: 'RookBlack.png',
+    2: 'KnightBlack.png',
+    3: 'BishopBlack.png',
+    4: 'QueenBlack.png',
+    5: 'KingBlack.png',
+    6: 'PawnBlack.png',
+    7: 'PawnWhite.png',
+    8: 'RookWhite.png',
+    9: 'KnightWhite.png',
+    10: 'BishopWhite.png',
+    11: 'QueenWhite.png',
+    12: 'KingWhite.png'
+}
 
 pygame.init()  # Initialize pygame
 
@@ -65,15 +76,16 @@ pygame.draw.rect(window, (255, 255, 255), pygame.Rect(485, 0, 235, 600))
 
 # Code Starts Here #
 n = Network()
-local_player = player()
-local_player.data = n.Make_Connection()
+local_piece_info = n.Make_Connection()
 
 ## Make Chess Pieces
-white = [Pawn(window, local_player.data[0][16][0], local_player.data[0][16][1], local_player.data[0][16][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][17][0], local_player.data[0][17][1], local_player.data[0][17][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][18][0], local_player.data[0][18][1], local_player.data[0][18][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][19][0], local_player.data[0][19][1], local_player.data[0][19][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][20][0], local_player.data[0][20][1], local_player.data[0][20][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][21][0], local_player.data[0][21][1], local_player.data[0][21][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][22][0], local_player.data[0][22][1], local_player.data[0][22][2], 'PawnWhite.png'), Pawn(window, local_player.data[0][23][0], local_player.data[0][23][1], local_player.data[0][23][2], 'PawnWhite.png'), Rook(window, local_player.data[0][24][0], local_player.data[0][24][1], local_player.data[0][24][2], 'RookWhite.png'), Knight(window, local_player.data[0][25][0], local_player.data[0][25][1], local_player.data[0][25][2], 'KnightWhite.png'), Bishop(window, local_player.data[0][26][0], local_player.data[0][26][1], local_player.data[0][26][2], 'BishopWhite.png'), Queen(window, local_player.data[0][27][0], local_player.data[0][27][1], local_player.data[0][27][2], 'QueenWhite.png'), King(window, local_player.data[0][28][0], local_player.data[0][28][1], local_player.data[0][28][2], 'KingWhite.png'), Bishop(window, local_player.data[0][29][0], local_player.data[0][29][1], local_player.data[0][29][2], 'BishopWhite.png'), Knight(window, local_player.data[0][30][0], local_player.data[0][30][1], local_player.data[0][30][2], 'KnightWhite.png'), Rook(window, local_player.data[0][31][0], local_player.data[0][31][1], local_player.data[0][31][2], 'RookWhite.png')]
+local = [Pawn(window, local_piece_info[0][0], local_piece_info[0][1], local_piece_info[0][2], dictionary_of_image_IDs[local_piece_info[0][3]]), Pawn(window, local_piece_info[1][0], local_piece_info[1][1], local_piece_info[1][2], dictionary_of_image_IDs[local_piece_info[1][3]]), Pawn(window, local_piece_info[2][0], local_piece_info[2][1], local_piece_info[2][2], dictionary_of_image_IDs[local_piece_info[2][3]]), Pawn(window, local_piece_info[3][0], local_piece_info[3][1], local_piece_info[3][2], dictionary_of_image_IDs[local_piece_info[3][3]]), Pawn(window, local_piece_info[4][0], local_piece_info[4][1], local_piece_info[4][2], dictionary_of_image_IDs[local_piece_info[4][3]]), Pawn(window, local_piece_info[5][0], local_piece_info[5][1], local_piece_info[5][2], dictionary_of_image_IDs[local_piece_info[5][3]]), Pawn(window, local_piece_info[6][0], local_piece_info[6][1], local_piece_info[6][2], dictionary_of_image_IDs[local_piece_info[6][3]]), Pawn(window, local_piece_info[7][0], local_piece_info[7][1], local_piece_info[7][2], dictionary_of_image_IDs[local_piece_info[7][3]]), Rook(window, local_piece_info[8][0], local_piece_info[8][1], local_piece_info[8][2], dictionary_of_image_IDs[local_piece_info[8][3]]), Knight(window, local_piece_info[9][0], local_piece_info[9][1], local_piece_info[9][2], dictionary_of_image_IDs[local_piece_info[9][3]]), Bishop(window, local_piece_info[10][0], local_piece_info[10][1], local_piece_info[10][2], dictionary_of_image_IDs[local_piece_info[10][3]]), Queen(window, local_piece_info[11][0], local_piece_info[11][1], local_piece_info[11][2], dictionary_of_image_IDs[local_piece_info[11][3]]), King(window, local_piece_info[12][0], local_piece_info[12][1], local_piece_info[12][2], dictionary_of_image_IDs[local_piece_info[12][3]]), Bishop(window, local_piece_info[13][0], local_piece_info[13][1], local_piece_info[13][2], dictionary_of_image_IDs[local_piece_info[13][3]]), Knight(window, local_piece_info[14][0], local_piece_info[14][1], local_piece_info[14][2], dictionary_of_image_IDs[local_piece_info[14][3]]), Rook(window, local_piece_info[15][0], local_piece_info[15][1], local_piece_info[15][2], dictionary_of_image_IDs[local_piece_info[15][3]])]
 
-black = [Rook(window, local_player.data[0][0][0], local_player.data[0][0][1], local_player.data[0][0][2], 'RookBlack.png'), Knight(window, local_player.data[0][1][0], local_player.data[0][1][1], local_player.data[0][1][2], 'KnightBlack.png'), Bishop(window, local_player.data[0][2][0], local_player.data[0][2][1], local_player.data[0][2][2], 'BishopBlack.png'), Queen(window, local_player.data[0][3][0], local_player.data[0][3][1], local_player.data[0][3][2], 'QueenBlack.png'), King(window, local_player.data[0][4][0], local_player.data[0][4][1], local_player.data[0][4][2], 'KingBlack.png'), Bishop(window, local_player.data[0][5][0], local_player.data[0][5][1], local_player.data[0][5][2], 'BishopBlack.png'), Knight(window, local_player.data[0][6][0], local_player.data[0][6][1], local_player.data[0][6][2], 'KnightBlack.png'), Rook(window, local_player.data[0][7][0], local_player.data[0][7][1], local_player.data[0][7][2], 'RookBlack.png'), Pawn(window, local_player.data[0][8][0], local_player.data[0][8][1], local_player.data[0][8][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][9][0], local_player.data[0][9][1], local_player.data[0][9][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][10][0], local_player.data[0][10][1], local_player.data[0][10][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][11][0], local_player.data[0][11][1], local_player.data[0][11][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][12][0], local_player.data[0][12][1], local_player.data[0][12][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][13][0], local_player.data[0][13][1], local_player.data[0][13][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][14][0], local_player.data[0][14][1], local_player.data[0][14][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][15][0], local_player.data[0][15][1], local_player.data[0][15][2], 'PawnBlack.png')]
+enemy_piece_info = n.send_and_receive(local_piece_info)
 
-chess_pieces = [white, black]  # Stores the chess pieces
+enemy = [Rook(window, enemy_piece_info[0][0], enemy_piece_info[0][1], enemy_piece_info[0][2], dictionary_of_image_IDs[enemy_piece_info[0][3]]), Knight(window, enemy_piece_info[1][0], enemy_piece_info[1][1], enemy_piece_info[1][2], dictionary_of_image_IDs[enemy_piece_info[1][3]]), Bishop(window, enemy_piece_info[2][0], enemy_piece_info[2][1], enemy_piece_info[2][2], dictionary_of_image_IDs[enemy_piece_info[2][3]]), Queen(window, enemy_piece_info[3][0], enemy_piece_info[3][1], enemy_piece_info[3][2], dictionary_of_image_IDs[enemy_piece_info[3][3]]), King(window, enemy_piece_info[4][0], enemy_piece_info[4][1], enemy_piece_info[4][2], dictionary_of_image_IDs[enemy_piece_info[4][3]]), Bishop(window, enemy_piece_info[5][0], enemy_piece_info[5][1], enemy_piece_info[5][2], dictionary_of_image_IDs[enemy_piece_info[5][3]]), Knight(window, enemy_piece_info[6][0], enemy_piece_info[6][1], enemy_piece_info[6][2], dictionary_of_image_IDs[enemy_piece_info[6][3]]), Rook(window, enemy_piece_info[7][0], enemy_piece_info[7][1], enemy_piece_info[7][2], dictionary_of_image_IDs[enemy_piece_info[7][3]]), Pawn(window, enemy_piece_info[8][0], enemy_piece_info[8][1], enemy_piece_info[8][2], dictionary_of_image_IDs[enemy_piece_info[8][3]]), Pawn(window, enemy_piece_info[9][0], enemy_piece_info[9][1], enemy_piece_info[9][2], dictionary_of_image_IDs[enemy_piece_info[9][3]]), Pawn(window, enemy_piece_info[10][0], enemy_piece_info[10][1], enemy_piece_info[10][2], dictionary_of_image_IDs[enemy_piece_info[10][3]]), Pawn(window, enemy_piece_info[11][0], enemy_piece_info[11][1], enemy_piece_info[11][2], dictionary_of_image_IDs[enemy_piece_info[11][3]]), Pawn(window, enemy_piece_info[12][0], enemy_piece_info[12][1], enemy_piece_info[12][2], dictionary_of_image_IDs[enemy_piece_info[12][3]]), Pawn(window, enemy_piece_info[13][0], enemy_piece_info[13][1], enemy_piece_info[13][2], dictionary_of_image_IDs[enemy_piece_info[13][3]]), Pawn(window, enemy_piece_info[14][0], enemy_piece_info[14][1], enemy_piece_info[14][2], dictionary_of_image_IDs[enemy_piece_info[14][3]]), Pawn(window, enemy_piece_info[15][0], enemy_piece_info[15][1], enemy_piece_info[15][2], dictionary_of_image_IDs[enemy_piece_info[15][3]])]
+
+chess_pieces = [local, enemy]
 
 clock = pygame.time.Clock()
 
@@ -81,6 +93,8 @@ run = True
 # Game Starts Here #
 while run:
     clock.tick(60)
+    
+    enemy_piece_info = n.send_and_receive(local_piece_info)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -91,64 +105,15 @@ while run:
     if m1:  # When the left mouse button is pressed
         m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
 
-        local_player.local_pos, local_player.enemy_pos = get_board_state(local_player.data)  # Get the state of the board
-        for piece in chess_pieces[local_player.data[3]]:  # Finds the piece that the player clicked on
+        local_pos, enemy_pos = get_board_state(local_piece_info, enemy_piece_info)
+        for piece in chess_pieces[0]:  # Finds the piece that the player clicked on
             if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:
-                local_player.selected_piece = piece
                 resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
                 piece.legal_moves = []  # Clears the list
-                piece.getLegalMoves(local_player.local_pos, local_player.enemy_pos)  # Returns a list of coordinates to display
-                local_player.legal_move = piece.legal_moves
+                piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
                 for coordinates in piece.legal_moves:
                     window.blit(star, (coordinates[0], coordinates[1]))
                 break
-
-        for move in local_player.legal_move:
-            if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
-                ### --- Store the old position of the piece --- ###
-                local_player.data[1] = [local_player.selected_piece.x, local_player.selected_piece.y, local_player.selected_piece.id]
-                ### --- Move the piece to selected square --- ###
-                local_player.selected_piece.x = move[0]
-                local_player.selected_piece.y = move[1]
-                local_player.selected_piece.reDraw(window)
-
-                ### --- Store the new position of the piece --- ###
-                local_player.data[2] = [local_player.selected_piece.x, local_player.selected_piece.y, local_player.selected_piece.id]
-
-                ### --- Update the data_list --- ###
-                for piece_info in local_player.data[0]:
-                    if local_player.selected_piece.id == piece_info[2]:
-                        piece_info[0] = local_player.selected_piece.x
-                        piece_info[1] = local_player.selected_piece.y
-                        break
-
-    print(local_player.data)
-    local_player.data = n.send_and_receive(local_player.data)
-    print(local_player.data)
-
-    ### --- Update Chess Pieces list --- ###
-    run_this = True
-    for white_piece in chess_pieces[0]:
-        if white_piece.id == local_player.data[2][2]:  # When the piece id is equal to the id of the moved piece
-            white_piece.x = local_player.data[2][0]
-            white_piece.y = local_player.data[2][1]
-            run_this = False
-            break
-    if run_this:
-        for black_piece in chess_pieces[1]:
-            if black_piece.id == local_player.data[2][2]:
-                black_piece.x = local_player.data[2][0]
-                black_piece.y = local_player.data[2][1]
-                break
-
-    ### --- Redraw every square --- ###
-    for square in ChessBoard_li:
-        square.reDraw(window)
-    ### --- Redraw every piece --- ###
-    for piece in chess_pieces[0]:
-        piece.reDraw(window)
-    for piece in chess_pieces[1]:
-        piece.reDraw(window)
 
     pygame.display.update()
 

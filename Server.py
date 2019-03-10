@@ -15,81 +15,43 @@ except socket.error as e:
 s.listen(2)  # Wait for connection from clients
 print('Waiting for a connection, Server Started ...')
 
-# Index 0: All piece positions
-    # Index 0: x-coordinate
-    # Index 1: y-coordinate
-    # Index 2: Piece ID
-    # Piece ID's:
-'''
-A8 Black Rook: 0
-B8 Black Knight: 1
-C8 Black Bishop: 2
-Black Queen: 3
-Black King: 4
-F8 Black Bishop: 5
-G8 Black Knight: 6
-H8 Black Rook: 7
-A7 Black Pawn: 8
-B7 Black Pawn: 9
-C7 Black Pawn: 10
-D7 Black Pawn: 11
-E7 Black Pawn: 12
-F7 Black Pawn: 13
-G7 Black Pawn: 14
-H7 Black Pawn: 15
+# Index 1 is x-coordinate
+# Index 2 is y-coordinate
+# Index 3 is piece id
+# Index 4 is image id
+white = [[0, 420, 16, 7], [60, 420, 17, 7], [120, 420, 18, 7], [180, 420, 19, 7], [240, 420, 20, 7], [300, 420, 21, 7], [360, 420, 22, 7], [420, 420, 23, 7], [0, 480, 24, 8], [60, 480, 25, 9], [120, 480, 26, 10], [180, 480, 27, 11], [240, 480, 28, 12], [300, 480, 29, 10], [360, 480, 30, 9], [420, 480, 31, 8]]
+black = [[0, 120, 8, 6], [60, 120, 9, 6], [120, 120, 10, 6], [180, 120, 11, 6], [240, 120, 12, 6], [300, 120, 13, 6], [360, 120, 14, 6], [420, 120, 15, 6], [0, 60, 0, 1], [60, 60, 1, 2], [120, 60, 2, 3], [180, 60, 3, 4], [240, 60, 4, 5], [300, 60, 5, 3], [360, 60, 6, 2], [420, 60, 7, 1]]
 
-A2 White Pawn: 16
-B2 White Pawn: 17
-C2 White Pawn: 18
-D2 White Pawn: 19
-E2 White Pawn: 20
-F2 White Pawn: 21
-G2 White Pawn: 22
-H2 White Pawn: 23
-A1 White Rook: 24
-B1 White Knight: 25
-C1 White Bishop: 26
-White Queen: 27
-White King: 28
-F1 White Bishop: 29
-G1 White Knight: 30
-H1 White Rook: 31
-'''
-# Index 1: Old Position
-# Index 2: New Position
-# Index 3: Color ID
-Data = [[[0, 60, 0], [60, 60, 1], [120, 60, 2], [180, 60, 3], [240, 60, 4], [300, 60, 5], [360, 60, 6], [420, 60, 7], [0, 120, 8], [60, 120, 9], [120, 120, 10], [180, 120, 11], [240, 120, 12], [300, 120, 13], [360, 120, 14], [420, 120, 15], [0, 420, 16], [60, 420, 17], [120, 420, 18], [180, 420, 19], [240, 420, 20], [300, 420, 21], [360, 420, 22], [420, 420, 23], [0, 480, 24], [60, 480, 25], [120, 480, 26], [180, 480, 27], [240, 480, 28], [300, 480, 29], [360, 480, 30], [420, 480, 31]], [0, 0, 666], [0, 0, 666], 0]  # Starting positions of the pieces
+pieces = [white, black]
 
 def ThreatedClient(conn, player):
-    if player == 0: # White
-        Data[3] = 0  # 0 denotes white
-    elif player == 1: # Black
-        Data[3] = 1  # 1 denotes black
-
     if player == 1: # Black
         # Flip the coordinates
-        for coordinates in Data[0]:
+        for coordinates in pieces[1]:
             coordinates[0] = 420 - coordinates[0]
             coordinates[1] = 540 - coordinates[1]
-    conn.send(pickle.dumps(Data))  # Send the starting positions of pieces to client
+    conn.send(pickle.dumps(pieces[player]))  # Send the starting positions of pieces to client
     while True:
         try:
             new_data = pickle.loads(conn.recv(2048))  # Get new positions made by the client
             if player == 1:  # Black
                 # Flip the coordinates
-                for coordinates in new_data[0]:
+                for coordinates in new_data:
                     coordinates[0] = 420 - coordinates[0]
                     coordinates[1] = 540 - coordinates[1]
+            pieces[player] = new_data
             if not new_data:
                 print('Disconnected...')
                 break
             else:
+                if player == 0:
+                    reply = pickle.dumps(pieces[1])
                 if player == 1:
-                    # Flip the coordinates
-                    for coordinates in new_data[0]:
+                    for coordinates in pieces[0]:
                         coordinates[0] = 420 - coordinates[0]
                         coordinates[1] = 540 - coordinates[1]
-                reply = pickle.dumps(new_data)  # Send the data to white
+                    reply = pickle.dumps(pieces[0])
+
             conn.sendall(reply)  # Send reply to clients
         except:
             break
