@@ -73,7 +73,7 @@ white = [Pawn(window, local_player.data[0][16][0], local_player.data[0][16][1], 
 
 black = [Rook(window, local_player.data[0][0][0], local_player.data[0][0][1], local_player.data[0][0][2], 'RookBlack.png'), Knight(window, local_player.data[0][1][0], local_player.data[0][1][1], local_player.data[0][1][2], 'KnightBlack.png'), Bishop(window, local_player.data[0][2][0], local_player.data[0][2][1], local_player.data[0][2][2], 'BishopBlack.png'), Queen(window, local_player.data[0][3][0], local_player.data[0][3][1], local_player.data[0][3][2], 'QueenBlack.png'), King(window, local_player.data[0][4][0], local_player.data[0][4][1], local_player.data[0][4][2], 'KingBlack.png'), Bishop(window, local_player.data[0][5][0], local_player.data[0][5][1], local_player.data[0][5][2], 'BishopBlack.png'), Knight(window, local_player.data[0][6][0], local_player.data[0][6][1], local_player.data[0][6][2], 'KnightBlack.png'), Rook(window, local_player.data[0][7][0], local_player.data[0][7][1], local_player.data[0][7][2], 'RookBlack.png'), Pawn(window, local_player.data[0][8][0], local_player.data[0][8][1], local_player.data[0][8][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][9][0], local_player.data[0][9][1], local_player.data[0][9][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][10][0], local_player.data[0][10][1], local_player.data[0][10][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][11][0], local_player.data[0][11][1], local_player.data[0][11][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][12][0], local_player.data[0][12][1], local_player.data[0][12][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][13][0], local_player.data[0][13][1], local_player.data[0][13][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][14][0], local_player.data[0][14][1], local_player.data[0][14][2], 'PawnBlack.png'), Pawn(window, local_player.data[0][15][0], local_player.data[0][15][1], local_player.data[0][15][2], 'PawnBlack.png')]
 
-chess_pieces = [white, black]
+chess_pieces = [white, black]  # Stores the chess pieces
 
 clock = pygame.time.Clock()
 
@@ -92,7 +92,7 @@ while run:
         m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
 
         local_player.local_pos, local_player.enemy_pos = get_board_state(local_player.data)  # Get the state of the board
-        for piece in chess_pieces[local_player.data[1]]:  # Finds the piece that the player clicked on
+        for piece in chess_pieces[local_player.data[3]]:  # Finds the piece that the player clicked on
             if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:
                 local_player.selected_piece = piece
                 resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
@@ -104,19 +104,51 @@ while run:
                 break
 
         for move in local_player.legal_move:
-            if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:
+            if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
+                ### --- Store the old position of the piece --- ###
+                local_player.data[1] = [local_player.selected_piece.x, local_player.selected_piece.y, local_player.selected_piece.id]
                 ### --- Move the piece to selected square --- ###
                 local_player.selected_piece.x = move[0]
                 local_player.selected_piece.y = move[1]
                 local_player.selected_piece.reDraw(window)
 
-                ### --- Update the Data List --- ###
+                ### --- Store the new position of the piece --- ###
+                local_player.data[2] = [local_player.selected_piece.x, local_player.selected_piece.y, local_player.selected_piece.id]
+
+                ### --- Update the data_list --- ###
                 for piece_info in local_player.data[0]:
                     if local_player.selected_piece.id == piece_info[2]:
                         piece_info[0] = local_player.selected_piece.x
                         piece_info[1] = local_player.selected_piece.y
+                        break
 
+    print(local_player.data)
     local_player.data = n.send_and_receive(local_player.data)
+    print(local_player.data)
+
+    ### --- Update Chess Pieces list --- ###
+    run_this = True
+    for white_piece in chess_pieces[0]:
+        if white_piece.id == local_player.data[2][2]:  # When the piece id is equal to the id of the moved piece
+            white_piece.x = local_player.data[2][0]
+            white_piece.y = local_player.data[2][1]
+            run_this = False
+            break
+    if run_this:
+        for black_piece in chess_pieces[1]:
+            if black_piece.id == local_player.data[2][2]:
+                black_piece.x = local_player.data[2][0]
+                black_piece.y = local_player.data[2][1]
+                break
+
+    ### --- Redraw every square --- ###
+    for square in ChessBoard_li:
+        square.reDraw(window)
+    ### --- Redraw every piece --- ###
+    for piece in chess_pieces[0]:
+        piece.reDraw(window)
+    for piece in chess_pieces[1]:
+        piece.reDraw(window)
 
     pygame.display.update()
 

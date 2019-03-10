@@ -58,13 +58,13 @@ H1 White Rook: 31
 # Index 1: Old Position
 # Index 2: New Position
 # Index 3: Color ID
-Data = [[[0, 60, 0], [60, 60, 1], [120, 60, 2], [180, 60, 3], [240, 60, 4], [300, 60, 5], [360, 60, 6], [420, 60, 7], [0, 120, 8], [60, 120, 9], [120, 120, 10], [180, 120, 11], [240, 120, 12], [300, 120, 13], [360, 120, 14], [420, 120, 15], [0, 420, 16], [60, 420, 17], [120, 420, 18], [180, 420, 19], [240, 420, 20], [300, 420, 21], [360, 420, 22], [420, 420, 23], [0, 480, 24], [60, 480, 25], [120, 480, 26], [180, 480, 27], [240, 480, 28], [300, 480, 29], [360, 480, 30], [420, 480, 31]], '']  # Starting positions of the pieces
+Data = [[[0, 60, 0], [60, 60, 1], [120, 60, 2], [180, 60, 3], [240, 60, 4], [300, 60, 5], [360, 60, 6], [420, 60, 7], [0, 120, 8], [60, 120, 9], [120, 120, 10], [180, 120, 11], [240, 120, 12], [300, 120, 13], [360, 120, 14], [420, 120, 15], [0, 420, 16], [60, 420, 17], [120, 420, 18], [180, 420, 19], [240, 420, 20], [300, 420, 21], [360, 420, 22], [420, 420, 23], [0, 480, 24], [60, 480, 25], [120, 480, 26], [180, 480, 27], [240, 480, 28], [300, 480, 29], [360, 480, 30], [420, 480, 31]], [0, 0, 666], [0, 0, 666], 0]  # Starting positions of the pieces
 
 def ThreatedClient(conn, player):
     if player == 0: # White
-        Data[1] = 0  # 0 denotes white
+        Data[3] = 0  # 0 denotes white
     elif player == 1: # Black
-        Data[1] = 1  # 1 denotes black
+        Data[3] = 1  # 1 denotes black
 
     if player == 1: # Black
         # Flip the coordinates
@@ -85,11 +85,11 @@ def ThreatedClient(conn, player):
                 break
             else:
                 if player == 1:
+                    # Flip the coordinates
                     for coordinates in new_data[0]:
                         coordinates[0] = 420 - coordinates[0]
                         coordinates[1] = 540 - coordinates[1]
                 reply = pickle.dumps(new_data)  # Send the data to white
-
             conn.sendall(reply)  # Send reply to clients
         except:
             break
