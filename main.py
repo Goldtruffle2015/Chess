@@ -94,12 +94,27 @@ while run:
         local_player.local_pos, local_player.enemy_pos = get_board_state(local_player.data)  # Get the state of the board
         for piece in chess_pieces[local_player.data[1]]:  # Finds the piece that the player clicked on
             if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:
+                local_player.selected_piece = piece
                 resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
                 piece.legal_moves = []  # Clears the list
                 piece.getLegalMoves(local_player.local_pos, local_player.enemy_pos)  # Returns a list of coordinates to display
+                local_player.legal_move = piece.legal_moves
                 for coordinates in piece.legal_moves:
                     window.blit(star, (coordinates[0], coordinates[1]))
                 break
+
+        for move in local_player.legal_move:
+            if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:
+                ### --- Move the piece to selected square --- ###
+                local_player.selected_piece.x = move[0]
+                local_player.selected_piece.y = move[1]
+                local_player.selected_piece.reDraw(window)
+
+                ### --- Update the Data List --- ###
+                for piece_info in local_player.data[0]:
+                    if local_player.selected_piece.id == piece_info[2]:
+                        piece_info[0] = local_player.selected_piece.x
+                        piece_info[1] = local_player.selected_piece.y
 
     local_player.data = n.send_and_receive(local_player.data)
 
