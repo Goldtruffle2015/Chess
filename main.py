@@ -7,6 +7,7 @@ Date: 2019-03-03
 import math
 from Classes import *
 import pygame
+from pygame.locals import *
 
 def resetBoard(squares, pieces):  # Used to draw over the stars from the board
     # Redraw the squares #
@@ -71,6 +72,7 @@ dictionary_of_image_IDs = {
 }
 
 pygame.init()  # Initialize pygame
+pygame.font.init()
 
 windowx = 720
 windowy = 600
@@ -95,7 +97,15 @@ for i in range(64):
 
 # Create Control Panel #
     # Background #
-pygame.draw.rect(window, (255, 255, 255), pygame.Rect(485, 0, 235, 600))
+pygame.draw.rect(window, (240, 240, 240), pygame.Rect(485, 0, 235, 600))
+
+# Create display that shows who moves #
+pygame.draw.rect(window, (255, 255, 255), pygame.Rect(490, 5, 225, 70))
+
+# Create Font Objects#
+player_move_WHITE = pygame.font.SysFont('Bookman Old Style', 60)
+player_move_BLACK = pygame.font.SysFont('Bookman Old Style', 60)
+player_move_TEXT = [player_move_WHITE, player_move_BLACK]
 
 # Code Starts Here #
 n = Network()
@@ -131,16 +141,16 @@ run_this = False  # Used to determine if the program should redraw stars
 while run:
     clock.tick(100)
 
+    player_can_move = False
+
     if local_piece_info[0] == 1:
         flip_coordinates(local_piece_info[1])
-        flip_coordinates(enemy_piece_info[1])
 
     enemy_piece_info = n.send_and_receive(local_piece_info)
 
     if local_piece_info[0] == 1:  # If player is black
         flip_coordinates(local_piece_info[1])
         flip_coordinates(enemy_piece_info[1])
-
 
     # Update enemy piece position #
     for i, enemy_piece in enumerate(chess_pieces[1]):
@@ -172,21 +182,32 @@ while run:
                 run_this = True
                 break
 
+        # Determine if player can move #
+        if local_piece_info[0] == 0:  # If player is white
+            if local_piece_info[2] == enemy_piece_info[2]:  # If white made the same number of moves as black
+                player_can_move = True
+        else:  # Player is black
+            if local_piece_info[2] < enemy_piece_info[2]:  # If black made the same number of moves as white
+                player_can_move = True
+
         # Move the selected piece #
-        for move in local_player.legal_moves:
-            if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
-                local_player.selected_piece.x = move[0]  # Set the x-coordinate of the selected piece to the selected square
-                local_player.selected_piece.y = move[1]  # Set the y-coordinate of the selected piece to the selected square
-                # Update local piece info #
-                for index in local_piece_info[1]:
-                    if local_player.selected_piece.id == index[2]:
-                        index[0] = local_player.selected_piece.x
-                        index[1] = local_player.selected_piece.y
-                        run_this = False
-                        break
-                break
+        if player_can_move:
+            for move in local_player.legal_moves:
+                if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
+                    local_piece_info[2] += 1
+                    local_player.selected_piece.x = move[0]  # Set the x-coordinate of the selected piece to the selected square
+                    local_player.selected_piece.y = move[1]  # Set the y-coordinate of the selected piece to the selected square
+                    # Update local piece info #
+                    for index in local_piece_info[1]:
+                        if local_player.selected_piece.id == index[2]:
+                            index[0] = local_player.selected_piece.x
+                            index[1] = local_player.selected_piece.y
+                            run_this = False
+                            break
+                    break
 
     reDraw_window(ChessBoard_li, chess_pieces[0], chess_pieces[1])
+
     if run_this:
         draw_stars(local_player.selected_piece.legal_moves)
 
