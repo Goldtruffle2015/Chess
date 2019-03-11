@@ -208,7 +208,7 @@ class Pawn(ChessPiece):
         if self.y - 60 >= 60 and not [int(self.x), int(self.y - 60)] in local and not [int(self.x), int(self.y - 60)] in enemy:
             self.legal_moves.append((int(self.x), int(self.y - 60)))
         # 2 Up
-        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local and not [int(self.x), int(self.y - 120)] in enemy:
+        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local and not [int(self.x), int(self.y - 120)] in enemy and self.y == 420:
             self.legal_moves.append((int(self.x), int(self.y - 120)))
 
 class Queen(ChessPiece):
