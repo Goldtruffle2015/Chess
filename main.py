@@ -71,6 +71,16 @@ dictionary_of_image_IDs = {
     12: 'KingWhite.png'
 }
 
+dictionary_of_player_turn = {
+    0: 'WHITE',
+    1: 'BLACK'
+}
+
+dictionary_of_player_move_text_colors = {
+    0: (255, 255, 255),
+    1: (0, 0, 0)
+}
+
 pygame.init()  # Initialize pygame
 pygame.font.init()
 
@@ -103,9 +113,7 @@ pygame.draw.rect(window, (240, 240, 240), pygame.Rect(485, 0, 235, 600))
 pygame.draw.rect(window, (255, 255, 255), pygame.Rect(490, 5, 225, 70))
 
 # Create Font Objects#
-player_move_WHITE = pygame.font.SysFont('Bookman Old Style', 60)
-player_move_BLACK = pygame.font.SysFont('Bookman Old Style', 60)
-player_move_TEXT = [player_move_WHITE, player_move_BLACK]
+player_move_TEXT = pygame.font.SysFont('Bookman Old Style', 60)
 
 # Code Starts Here #
 n = Network()
@@ -141,7 +149,16 @@ run_this = False  # Used to determine if the program should redraw stars
 while run:
     clock.tick(100)
 
-    player_can_move = False
+    player_move = int(math.fabs(local_piece_info[2] - enemy_piece_info[2]))
+    # Display who's move it is #
+        # Redraw text background #
+    pygame.draw.rect(window, dictionary_of_player_move_text_colors[player_move], pygame.Rect(490, 5, 225, 70))
+        # Redraw text #
+    label = player_move_TEXT.render(dictionary_of_player_turn[player_move], 1, dictionary_of_player_move_text_colors[(player_move + 1) % 2])
+    txt_size = player_move_TEXT.size(dictionary_of_player_turn[player_move])
+    window.blit(label, (490 + ((225 - txt_size[0]) / 2), 5 + ((70 - txt_size[1]) / 2)))
+
+    player_can_move = False  # Used to determine if the local player can move. Defaults to False
 
     if local_piece_info[0] == 1:
         flip_coordinates(local_piece_info[1])
