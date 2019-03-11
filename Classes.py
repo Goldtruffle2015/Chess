@@ -198,6 +198,7 @@ class Pawn(ChessPiece):
 
     def getLegalMoves(self, local, enemy):
         self.legal_moves = []
+        run_this_move = False  # Moving 1 up is a prerequisite for moving 2 up
         # Top Left
         if self.x - 60 >= 0 and self.y - 60 >= 60 and [int(self.x - 60), int(self.y - 60)] in enemy:  # Checks if an enemy piece is at that coordinate point
             self.legal_moves.append((int(self.x - 60), int(self.y - 60)))  # Stores the row and column indexes as a tuple
@@ -207,8 +208,9 @@ class Pawn(ChessPiece):
         # 1 Up
         if self.y - 60 >= 60 and not [int(self.x), int(self.y - 60)] in local and not [int(self.x), int(self.y - 60)] in enemy:
             self.legal_moves.append((int(self.x), int(self.y - 60)))
+            run_this_move = True
         # 2 Up
-        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local and not [int(self.x), int(self.y - 120)] in enemy and self.y == 420:
+        if self.y - 120 >= 60 and not [int(self.x), int(self.y - 120)] in local and not [int(self.x), int(self.y - 120)] in enemy and self.y == 420 and run_this_move:
             self.legal_moves.append((int(self.x), int(self.y - 120)))
 
 class Queen(ChessPiece):
