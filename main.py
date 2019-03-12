@@ -26,9 +26,9 @@ def get_board_state(local, enemy):
     local_pieces = []  # Keeps track of the position of the player's pieces
     enemy_pieces = []  # Keeps track of the position of the enemy's pieces
 
-    for i in range(16):  # Local pieces
+    for i in range(len(local)):  # Local pieces
         local_pieces.append(local[i][:2])
-    for i in range(16):  # Enemy pieces
+    for i in range(len(enemy)):  # Enemy pieces
         enemy_pieces.append(enemy[i][:2])
 
     return local_pieces, enemy_pieces
@@ -149,7 +149,7 @@ run_this = False  # Used to determine if the program should redraw stars
 while run:
     clock.tick(100)
 
-    player_move = int(math.fabs(local_piece_info[2] - enemy_piece_info[2]))
+    player_move = int(math.fabs(local_piece_info[2] - enemy_piece_info[2]))  # Determines who's move it is. 0 is white's turn. 1 is black's turn.
     # Display who's move it is #
         # Redraw text background #
     pygame.draw.rect(window, dictionary_of_player_move_text_colors[player_move], pygame.Rect(490, 5, 225, 70))
@@ -170,10 +170,34 @@ while run:
         flip_coordinates(enemy_piece_info[1])
 
     # Update enemy piece position #
+        # Removes any pieces not in the enemy_piece_info
+    for i, info in enumerate(enemy_piece_info[1]):
+        if info[2] == chess_pieces[1][i].id:
+            pass
+        else:
+            del chess_pieces[1][i]
+            break
+        # Redraws every enemy piece
     for i, enemy_piece in enumerate(chess_pieces[1]):
-        enemy_piece.x = enemy_piece_info[1][i][0]
-        enemy_piece.y = enemy_piece_info[1][i][1]
-        enemy_piece.reDraw(window)
+            enemy_piece.x = enemy_piece_info[1][i][0]
+            enemy_piece.y = enemy_piece_info[1][i][1]
+            enemy_piece.reDraw(window)
+
+    # Update local piece position #
+    break_statement = False
+    counter = 0
+    for loc_pie in chess_pieces[0]:  # loc_pie means local piece. I ran out of names to use.
+        for en_pie in chess_pieces[1]:  # en_pie means enemy piece. I ran out of names to use.
+            # The condition is true if the local piece shares a coordinate with an enemy piece and it is the local player's turn
+            if loc_pie.x == en_pie.x and loc_pie.y == en_pie.y and player_move == local_piece_info[0]:
+                del chess_pieces[0][counter]  # Delete the piece
+                print(counter)
+                local_piece_info[1].pop(counter)
+                break_statement = True
+                break
+        if break_statement:
+            break
+        counter += 1
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -186,7 +210,7 @@ while run:
         m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
 
         local_pos, enemy_pos = get_board_state(local_piece_info[1], enemy_piece_info[1])  # Get the positions of every piece
-        for piece in chess_pieces[0]:  # Finds the piece that the player clicked on
+        for piece in chess_pieces[0]:  # Finds the friendly piece that the player clicked on
             if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:  # If the player clicked on a piece
                 local_player.legal_moves = []  # Reset the legal moves of player
                 local_player.selected_piece = piece  # Set the selected piece to this piece
@@ -211,7 +235,7 @@ while run:
         if player_can_move:
             for move in local_player.legal_moves:
                 if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
-                    local_piece_info[2] += 1
+                    local_piece_info[2] += 1  # Add 1 to total moves made by local player
                     local_player.selected_piece.x = move[0]  # Set the x-coordinate of the selected piece to the selected square
                     local_player.selected_piece.y = move[1]  # Set the y-coordinate of the selected piece to the selected square
                     # Update local piece info #
