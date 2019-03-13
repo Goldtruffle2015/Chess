@@ -56,6 +56,12 @@ def draw_stars(legal_moves):
     for coordinates in legal_moves:
         window.blit(star, (coordinates[0], coordinates[1]))
 
+def piece_exists(info_list, piece_obj):
+    for info_index in info_list:
+        if info_index[2] == piece_obj.id:  # Compares id's
+            return True  # When the piece object has been found
+    return False
+
 dictionary_of_image_IDs = {
     1: 'RookBlack.png',
     2: 'KnightBlack.png',
@@ -199,6 +205,7 @@ while run:
             if loc_pie.x == en_pie.x and loc_pie.y == en_pie.y and player_move == local_piece_info[0]:
                 del chess_pieces[0][counter]  # Delete the piece
                 local_piece_info[1].pop(counter)  # Delete the piece specs from the local piece list
+                change_in_turn = True
                 break_loop = True
                 break
         if break_loop:
@@ -209,17 +216,19 @@ while run:
             run = False
             break
 
+    # Update legal moves of selected piece when enemy makes a move
     if change_in_turn:
         try:
             # Reset the legal moves of selected piece #
             local_pos, enemy_pos = get_board_state(local_piece_info[1], enemy_piece_info[1])  # Get the positions of every piece
-            local_player.legal_moves = []  # Reset the legal moves of player
-            resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
-            local_player.selected_piece.legal_moves = []  # Clears the list
-            local_player.selected_piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
-            local_player.legal_moves = local_player.selected_piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
-            draw_stars(local_player.selected_piece.legal_moves)  # Draw a star on every square the player can legally go to
-            change_in_turn = False
+            local_player.selected_piece.legal_moves = []  # Reset the legal moves of player
+            reDraw_window(ChessBoard_li, chess_pieces[0], chess_pieces[1])
+            if piece_exists(local_piece_info[1], local_player.selected_piece):  # Checks if the player's selected piece exists
+                local_player.selected_piece.legal_moves = []  # Clears the list
+                local_player.selected_piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
+                local_player.legal_moves = local_player.selected_piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
+                draw_stars(local_player.selected_piece.legal_moves)  # Draw a star on every square the player can legally go to
+                change_in_turn = False
         except AttributeError:
             pass
 
