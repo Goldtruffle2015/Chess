@@ -213,7 +213,6 @@ while run:
             if piece_exists(local_piece_info[1], local_player.selected_piece):  # Checks if the player's selected piece exists
                 local_player.selected_piece.legal_moves = []  # Clears the list
                 local_player.selected_piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
-                local_player.legal_moves = local_player.selected_piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
                 draw_stars(local_player.selected_piece.legal_moves)  # Draw a star on every square the player can legally go to
                 change_in_turn = False
         except AttributeError:
@@ -229,13 +228,11 @@ while run:
         local_pos, enemy_pos = get_board_state(local_piece_info[1], enemy_piece_info[1])  # Get the positions of every piece
         for piece in chess_pieces[0]:  # Finds the friendly piece that the player clicked on
             if piece.x <= m_pos[0] < piece.x + 60 and piece.y <= m_pos[1] < piece.y + 60:  # If the player clicked on a piece
-                local_player.legal_moves = []  # Reset the legal moves of player
                 local_player.selected_piece = piece  # Set the selected piece to this piece
                 run_this = True
                 reDraw_window(ChessBoard_li, chess_pieces[0], chess_pieces[1])
                 piece.legal_moves = []  # Clears the list
                 piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
-                local_player.legal_moves = piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
                 draw_stars(piece.legal_moves)  # Draw a star on every square the player can legally go to
                 break
 
@@ -249,7 +246,7 @@ while run:
 
         # Move the selected piece #
         if player_can_move:
-            for move in local_player.legal_moves:
+            for move in local_player.selected_piece.legal_moves:
                 if move[0] <= m_pos[0] < move[0] + 60 and move[1] <= m_pos[1] < move[1] + 60:  # When player selected square to go to
                     local_piece_info[2] += 1  # Add 1 to total moves made by local player
                     local_player.selected_piece.x = move[0]  # Set the x-coordinate of the selected piece to the selected square
