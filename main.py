@@ -170,35 +170,33 @@ while run:
         flip_coordinates(enemy_piece_info[1])
 
     # Update enemy piece position #
-        # Removes any pieces not in the enemy_piece_info
-    for i, info in enumerate(enemy_piece_info[1]):
-        if info[2] == chess_pieces[1][i].id:
-            pass
-        else:
-            del chess_pieces[1][i]
-            break
+    for index, var in enumerate(chess_pieces[1]):  # For every enemy piece
+        try:  # When it gets to the end of chess_pieces[1] and enemy_piece_info is out of range.
+            if enemy_piece_info[1][index][2] == var.id:  # When ID's match up
+                pass
+            else:  # Means the piece got deleted from the database
+                del var  # Delete the piece
+        except IndexError:
+            del chess_pieces[1][index]  # Delete the variable
         # Redraws every enemy piece
     for i, enemy_piece in enumerate(chess_pieces[1]):
-            enemy_piece.x = enemy_piece_info[1][i][0]
-            enemy_piece.y = enemy_piece_info[1][i][1]
-            enemy_piece.reDraw(window)
+        enemy_piece.x = enemy_piece_info[1][i][0]
+        enemy_piece.y = enemy_piece_info[1][i][1]
+        enemy_piece.reDraw(window)
 
     # Update local piece position #
-    break_statement = False
-    counter = 0
-    for loc_pie in chess_pieces[0]:  # loc_pie means local piece. I ran out of names to use.
+    break_loop = False
+    for counter, loc_pie in enumerate(chess_pieces[0]):  # loc_pie means local piece. I ran out of names to use.
         for en_pie in chess_pieces[1]:  # en_pie means enemy piece. I ran out of names to use.
             # The condition is true if the local piece shares a coordinate with an enemy piece and it is the local player's turn
             if loc_pie.x == en_pie.x and loc_pie.y == en_pie.y and player_move == local_piece_info[0]:
                 del chess_pieces[0][counter]  # Delete the piece
-                print(counter)
-                local_piece_info[1].pop(counter)
-                break_statement = True
+                local_piece_info[1].pop(counter)  # Delete the piece specs from the local piece list
+                break_loop = True
                 break
-        if break_statement:
+        if break_loop:
             break
-        counter += 1
-
+    # QUIT button #
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
