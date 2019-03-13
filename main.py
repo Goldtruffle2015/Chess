@@ -175,9 +175,12 @@ while run:
             if enemy_piece_info[1][index][2] == var.id:  # When ID's match up
                 pass
             else:  # Means the piece got deleted from the database
-                del var  # Delete the piece
+                del chess_pieces[1][index]  # Delete the piece
+                break
         except IndexError:
+            print('It goes here')
             del chess_pieces[1][index]  # Delete the variable
+            break
         # Redraws every enemy piece
     for i, enemy_piece in enumerate(chess_pieces[1]):
         enemy_piece.x = enemy_piece_info[1][i][0]
