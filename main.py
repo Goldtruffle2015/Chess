@@ -145,11 +145,16 @@ clock = pygame.time.Clock()
 
 run = True
 run_this = False  # Used to determine if the program should redraw stars
+process = 0  # Used to keep track of the number of times the program processed the entire while loop
+previous_player_move = int(math.fabs(local_piece_info[2] - enemy_piece_info[2]))  # Used to help determine when player turn changes
+change_in_turn = False
 # Game Starts Here #
 while run:
-    clock.tick(100)
+    clock.tick()
 
     player_move = int(math.fabs(local_piece_info[2] - enemy_piece_info[2]))  # Determines who's move it is. 0 is white's turn. 1 is black's turn.
+    if not player_move == previous_player_move:  # When player turn changes
+        change_in_turn = True
     # Display who's move it is #
         # Redraw text background #
     pygame.draw.rect(window, dictionary_of_player_move_text_colors[player_move], pygame.Rect(490, 5, 225, 70))
@@ -178,7 +183,6 @@ while run:
                 del chess_pieces[1][index]  # Delete the piece
                 break
         except IndexError:
-            print('It goes here')
             del chess_pieces[1][index]  # Delete the variable
             break
         # Redraws every enemy piece
@@ -205,9 +209,25 @@ while run:
             run = False
             break
 
+    if change_in_turn:
+        try:
+            # Reset the legal moves of selected piece #
+            local_pos, enemy_pos = get_board_state(local_piece_info[1], enemy_piece_info[1])  # Get the positions of every piece
+            local_player.legal_moves = []  # Reset the legal moves of player
+            resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
+            local_player.selected_piece.legal_moves = []  # Clears the list
+            local_player.selected_piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
+            local_player.legal_moves = local_player.selected_piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
+            draw_stars(local_player.selected_piece.legal_moves)  # Draw a star on every square the player can legally go to
+            change_in_turn = False
+        except AttributeError:
+            pass
+
     m1, m2, m3 = pygame.mouse.get_pressed()
 
-    if m1:  # When the left mouse button is pressed
+    if m1 and process > 1:  # When the left mouse button is pressed
+        # and the program has processed the while loop more than once.
+        # This is to make sure stars are not drawn right when after player moves a piece.
         m_pos = pygame.mouse.get_pos()  # Returns a tuple with x and y coordinates of mouse
 
         local_pos, enemy_pos = get_board_state(local_piece_info[1], enemy_piece_info[1])  # Get the positions of every piece
@@ -221,7 +241,6 @@ while run:
                 piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
                 local_player.legal_moves = piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
                 draw_stars(piece.legal_moves)  # Draw a star on every square the player can legally go to
-                run_this = True
                 break
 
         # Determine if player can move #
@@ -239,6 +258,7 @@ while run:
                     local_piece_info[2] += 1  # Add 1 to total moves made by local player
                     local_player.selected_piece.x = move[0]  # Set the x-coordinate of the selected piece to the selected square
                     local_player.selected_piece.y = move[1]  # Set the y-coordinate of the selected piece to the selected square
+                    process = 0
                     # Update local piece info #
                     for index in local_piece_info[1]:
                         if local_player.selected_piece.id == index[2]:
@@ -252,6 +272,8 @@ while run:
 
     if run_this:
         draw_stars(local_player.selected_piece.legal_moves)
+
+    process += 1  # Program has ran through the entire while loop once
 
     pygame.display.update()
 
