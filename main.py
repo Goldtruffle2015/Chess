@@ -9,19 +9,6 @@ from Classes import *
 import pygame
 from pygame.locals import *
 
-def resetBoard(squares, pieces):  # Used to draw over the stars from the board
-    # Redraw the squares #
-    for s in squares:
-        s.reDraw(window)
-
-    # Redraw the local pieces #
-    for l in pieces[0]:
-        l.reDraw(window)
-
-    # Redraw the enemy pieces #
-    for e in pieces[1]:
-        e.reDraw(window)
-
 def get_board_state(local, enemy):
     local_pieces = []  # Keeps track of the position of the player's pieces
     enemy_pieces = []  # Keeps track of the position of the enemy's pieces
@@ -245,7 +232,7 @@ while run:
                 local_player.legal_moves = []  # Reset the legal moves of player
                 local_player.selected_piece = piece  # Set the selected piece to this piece
                 run_this = True
-                resetBoard(ChessBoard_li, chess_pieces)  # Blit the current board layout
+                reDraw_window(ChessBoard_li, chess_pieces[0], chess_pieces[1])
                 piece.legal_moves = []  # Clears the list
                 piece.getLegalMoves(local_pos, enemy_pos)  # Returns a list of coordinates to display
                 local_player.legal_moves = piece.legal_moves  # Set the legal moves of the player to the legal moves of piece
